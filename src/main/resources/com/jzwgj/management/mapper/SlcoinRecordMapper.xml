@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jzwgj.management.mapper.SlcoinRecordMapper" >
+  	<resultMap id="BaseResultMap" type="com.jzwgj.management.server.web.activity.domain.SlcoinRecord" >
+    	<id column="ID" property="id" jdbcType="BIGINT" />
+	    <result column="USER_ID" property="userId" jdbcType="BIGINT" />
+	    <result column="INVITED_USER_ID" property="invitedUserId" jdbcType="BIGINT" />
+	    <result column="ORDER_NO" property="orderNo" jdbcType="VARCHAR" />
+	    <result column="SLCOIN_SHOP_ID" property="slcoinShopId" jdbcType="BIGINT" />
+	    <result column="ACTIVITY_ID" property="activityId" jdbcType="BIGINT" />
+	    <result column="TYPE" property="type" jdbcType="INTEGER" />
+	    <result column="AMOUNT" property="amount" jdbcType="INTEGER" />
+	    <result column="STATUS" property="status" jdbcType="INTEGER" />
+	    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+	    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+	    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+  	</resultMap>
+  	<resultMap id="BaseResultVoMap" type="com.jzwgj.management.server.web.activity.domain.SlcoinRecordVo" extends="BaseResultMap" >
+	    <result column="beginTime" property="beginTime" jdbcType="VARCHAR" />
+	    <result column="endTime" property="endTime" jdbcType="VARCHAR" />
+	    <result column="beginDate" property="beginDate" jdbcType="TIMESTAMP" />
+	    <result column="endDate" property="endDate" jdbcType="TIMESTAMP" />
+  	</resultMap>
+  	<resultMap id="UserResultMap" type="com.jzwgj.management.server.web.activity.domain.UserVo" >
+	    <id column="ID" property="id" jdbcType="BIGINT" />
+	    <result column="NICKNAME" property="nickName" jdbcType="VARCHAR" />
+	    <result column="LOGIN_ACCOUNT" property="loginAccount" jdbcType="VARCHAR" />
+	    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+	    <result column="INVITED_USER_ID" property="invitedUserId" jdbcType="BIGINT" />
+	    <result column="TYPE" property="type" jdbcType="INTEGER" />
+	  </resultMap>
+  	
+  	
+  	<sql id="Base_Column_List" >
+    	ID, USER_ID, INVITED_USER_ID, ORDER_NO, SLCOIN_SHOP_ID, ACTIVITY_ID, TYPE, AMOUNT, STATUS, CREATE_TIME, UPDATE_TIME,REMARK
+  	</sql>
+  	
+  	<sql id="queryObjWhereClause">
+  		<if test="slcoinRecord.userId != null">
+  			and user_id = #{slcoinRecord.userId,jdbcType=BIGINT}
+  		</if>
+  		<if test="slcoinRecord.invitedUserId != null">
+  			and INVITED_USER_ID = #{slcoinRecord.invitedUserId,jdbcType=BIGINT}
+  		</if>
+  		<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(slcoinRecord.beginTime)">
+  			and DATE_FORMAT(CREATE_TIME,'%Y-%m-%d') >= DATE_FORMAT(#{slcoinRecord.beginTime,jdbcType=VARCHAR},'%Y-%m-%d')
+  		</if>
+  		<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(slcoinRecord.endTime)">
+  			and DATE_FORMAT(CREATE_TIME,'%Y-%m-%d') &lt;= DATE_FORMAT(#{slcoinRecord.endTime,jdbcType=VARCHAR},'%Y-%m-%d')
+  		</if> 
+  		<if test="slcoinRecord.type != null">
+  			and type = #{slcoinRecord.type,jdbcType=INTEGER}
+  		</if>
+  	</sql>
+  	
+  	<!-- 查询不同类型的刷脸币总量 -->
+  	<select id="getTotalGiveSlcoin" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+  		select sum(amount) from slcoin_record where STATUS = 1 and type = #{type,jdbcType=INTEGER}
+  	</select>
+  	
+  	
+  	<select id="getCountByShopNo" resultType="java.lang.Integer" parameterType="java.util.Map">
+  		select count(1) from slcoin_activity where STATUS = 1
+  		<if test="slcoinRecord.slcoinShopId != null">
+  			and SLCOIN_SHOP_ID = #{slcoinShopId,jdbcType=BIGINT}
+  		</if>
+  		<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(slcoinRecord.types)">
+  			and TYPE in (#{slcoinRecord.types,jdbcType=VARCHAR})
+  		</if>
+  		<if test="slcoinRecord.activityId != null">
+  			and ACTIVITY_ID = #{activityId,jdbcType=BIGINT}
+  		</if>
+  	</select>
+  	
+  	<select id="findSlcoinRecordByShopNoPageList" resultMap="BaseResultMap" parameterType="java.util.Map">
+  		select 
+  			<include refid="Base_Column_List"/> 
+  		from slcoin_record 
+  		
+		where STATUS = 1
+		
+  		order by create_time desc
+  		
+  		limit #{start},#{pageSize}
+  	</select>
+  	
+  	<select id="getSlcoinRecordTime" resultMap="BaseResultVoMap">
+  		select min(create_time) as beginDate,max(create_time) as endDate from slcoin_record where STATUS = 1
+  	</select>
+  	
+  	<select id="getSlcoinRecordByTime" resultType="java.lang.Integer" parameterType="java.util.Map">
+  		select sum(AMOUNT) as AMOUNT from slcoin_record 
+  			WHERE STATUS = 1 and DATE_FORMAT(CREATE_TIME,'%Y-%m-%d') = DATE_FORMAT(#{time,jdbcType=VARCHAR},'%Y-%m-%d') and type = #{type,jdbcType=BIGINT};
+  	</select>
+  	
+  	<select id="getSlcoinRecordByCurrentTime" resultType="java.lang.Integer" parameterType="java.util.Map">
+  		select sum(AMOUNT) as AMOUNT from slcoin_record WHERE STATUS = 1
+  			<include refid="queryObjWhereClause"/> 
+  		and type = #{type,jdbcType=BIGINT};
+  	</select>
+  	
+  	<!-- 查询用户数量 -->
+  	<select id="getUserCount" resultType="java.lang.Integer" parameterType="java.util.Map" >
+  		select count(1) from user 
+  		join slcoin_record
+  		on 
+  		<choose>
+  			<!-- 
+  			<when test="loginAccountType == 0">
+  				slcoin_record.user_id = user.id AND (slcoin_record.type = 5 OR slcoin_record.type = 1 OR slcoin_record.type = 4)
+  			</when>
+  			 -->
+  			<when test="loginAccountType == 1">
+  				slcoin_record.type = 1 and slcoin_record.user_id = user.id
+  			</when>
+  			<when test="loginAccountType == 2">
+  				slcoin_record.type = 4 and slcoin_record.user_id = user.id
+  			</when>
+  			<when test="loginAccountType == 3">
+  				slcoin_record.type = 5 and slcoin_record.user_id = user.id
+  			</when>
+  			<otherwise>
+  				slcoin_record.type = 1 and slcoin_record.user_id = user.id
+  			</otherwise>
+  		</choose>
+  		
+  		
+  		where user.STATUS = 1
+  		
+  		<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(user.loginAccount)">
+	  	 	and user.login_account = #{user.loginAccount,jdbcType=VARCHAR}
+  		</if>
+  		<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(user.nickname)">
+	  	 	and user.nickname like concat("%",#{user.nickname,jdbcType=VARCHAR},"%")
+  		</if>
+  		<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(user.createTimeStart)">
+	  	 	and DATE_FORMAT(slcoin_record.create_time,'%Y-%m-%d') >= DATE_FORMAT(#{user.createTimeStart,jdbcType=VARCHAR},'%Y-%m-%d') 
+  		</if>
+  		<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(user.createTimeEnd)">
+	  	 	and DATE_FORMAT(slcoin_record.create_time,'%Y-%m-%d') &lt;= DATE_FORMAT(#{user.createTimeEnd,jdbcType=VARCHAR},'%Y-%m-%d') 
+  		</if>
+  		
+  	</select>
+  	
+  	<!-- 分页查询用户 -->
+	<select id="findUserPageList" resultMap="UserResultMap" parameterType="java.util.Map">
+  		select 
+  			user.ID,user.NICKNAME,user.LOGIN_ACCOUNT,user.create_time,slcoin_record.INVITED_USER_ID,slcoin_record.type
+  		from user 
+  		join slcoin_record
+  		on 
+  		<choose>
+  			<!-- 
+  			<when test="loginAccountType == 0">
+  				slcoin_record.user_id = user.id AND (slcoin_record.type = 5 OR slcoin_record.type = 1 OR slcoin_record.type = 4)
+  			</when>
+  			 -->
+  			<when test="loginAccountType == 1">
+  				slcoin_record.type = 1 and slcoin_record.user_id = user.id
+  			</when>
+  			<when test="loginAccountType == 2">
+  				slcoin_record.type = 4 and slcoin_record.user_id = user.id
+  			</when>
+  			<when test="loginAccountType == 3">
+  				slcoin_record.type = 5 and slcoin_record.user_id = user.id
+  			</when>
+  			<otherwise>
+  				slcoin_record.type = 1 and slcoin_record.user_id = user.id
+  			</otherwise>
+  		</choose>
+  		
+  		where user.STATUS = 1
+		<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(user.loginAccount)">
+	  	 	and user.login_account = #{user.loginAccount,jdbcType=VARCHAR}
+  		</if>
+  		<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(user.nickname)">
+	  	 	and user.nickname like concat("%",#{user.nickname,jdbcType=VARCHAR},"%")
+  		</if>
+  		<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(user.createTimeStart)">
+	  	 	and DATE_FORMAT(slcoin_record.create_time,'%Y-%m-%d') >= DATE_FORMAT(#{user.createTimeStart,jdbcType=VARCHAR},'%Y-%m-%d') 
+  		</if>
+  		<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(user.createTimeEnd)">
+	  	 	and DATE_FORMAT(slcoin_record.create_time,'%Y-%m-%d') &lt;= DATE_FORMAT(#{user.createTimeEnd,jdbcType=VARCHAR},'%Y-%m-%d') 
+  		</if>
+		
+  		order by slcoin_record.create_time desc
+  		<if test="start!=null">
+  			limit #{start},#{pageSize}
+  		</if> 
+  	</select>
+  	
+  	<select id="getSlcoinRecord" resultMap="BaseResultMap" parameterType="java.util.Map">
+  		select
+  			<include refid="Base_Column_List"/> 
+		from slcoin_record WHERE STATUS = 1
+  			<include refid="queryObjWhereClause"/> 
+  		limit 1
+  	</select>
+  	
+  	<!-- 查找个人历史颜值总数 -->
+  	<select id="getHistoryTotalSlcoin" resultType="java.lang.Integer" parameterType="java.lang.Long">
+		SELECT IFNULL(SUM(AMOUNT),0) FROM slcoin_record WHERE USER_ID = #{userId} AND TYPE in (1,4,5,6,7);
+  	</select>
+  	
+  	<!-- 分页查询用户颜值记录 -->
+  	<select id="findSlcoinRecordPageList" resultMap="BaseResultVoMap" parameterType="java.util.Map">
+  		SELECT 
+  			<include refid="Base_Column_List"/> 
+  		FROM 
+  			slcoin_record 
+		WHERE 
+			STATUS = 1 AND USER_ID = #{slcoinRecordVo.userId,jdbcType=BIGINT} 
+			<if test="slcoinRecordVo.type !=null and slcoinRecordVo.type != '' ">
+				<choose>
+					<when test="slcoinRecordVo.type == 1">
+						AND TYPE IN (1,4,5) 
+					</when>
+					<otherwise>
+						And TYPE = #{slcoinRecordVo.type} 
+					</otherwise>
+				</choose>
+			</if>
+			<if test="slcoinRecordVo.beginTime != null and slcoinRecordVo.beginTime != '' ">
+				<!-- AND CREATE_TIME BETWEEN  &gt;= #{slcoinRecordVo.beginTime} AND CREATE_TIME &lt;= #{slcoinRecordVo.endTime} --> 
+				AND DATE(CREATE_TIME) BETWEEN DATE_FORMAT(#{slcoinRecordVo.beginTime,jdbcType=VARCHAR},'%Y-%m-%d') AND DATE_FORMAT(#{slcoinRecordVo.endTime,jdbcType=VARCHAR},'%Y-%m-%d') 
+			</if>
+  		ORDER BY 
+  			create_time desc 
+  		LIMIT 
+  			#{start},#{pageSize}
+  	</select>
+  	
+  	<!-- 统计分页查询用户颜值记录总数 -->
+  	<select id="getPageCount" resultType="java.lang.Integer" parameterType="com.jzwgj.management.server.web.activity.domain.SlcoinRecordVo">
+  		SELECT 
+  			COUNT(1) 
+  		FROM 
+  			slcoin_record 
+		WHERE 
+			STATUS = 1 AND USER_ID = #{userId,jdbcType=BIGINT} 
+			<if test="type !=null and type != '' ">
+				<choose>
+					<when test="type == 1">
+						AND TYPE IN (1,4,5) 
+					</when>
+					<otherwise>
+						AND TYPE = #{type} 
+					</otherwise>
+				</choose>
+			</if>
+			<if test="beginTime != null and beginTime != '' ">
+				AND DATE(CREATE_TIME) BETWEEN DATE_FORMAT(#{beginTime,jdbcType=VARCHAR},'%Y-%m-%d') AND DATE_FORMAT(#{endTime,jdbcType=VARCHAR},'%Y-%m-%d') 
+			</if>
+  	</select>
+  	
+  	<!-- 新增一条记录 -->
+  	<insert id="insert" parameterType="com.jzwgj.management.server.web.activity.domain.SlcoinRecord">
+		insert into slcoin_record
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID,
+			</if>
+			<if test="userId != null">
+				USER_ID,
+			</if>
+			<if test="invitedUserId != null">
+				INVITED_USER_ID,
+			</if>
+			<if test="orderNo != null">
+				ORDER_NO,
+			</if>
+			<if test="slcoinShopId != null">
+				SLCOIN_SHOP_ID,
+			</if>
+			<if test="type != null">
+				TYPE,
+			</if>
+			<if test="amount != null">
+				AMOUNT,
+			</if>
+			<if test="status != null">
+				STATUS,
+			</if>
+			<if test="createTime != null">
+				CREATE_TIME,
+			</if>
+			<if test="updateTime != null">
+				UPDATE_TIME,
+			</if>
+			<if test="remark != null">
+				REMARK,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+			<if test="invitedUserId != null">
+				#{invitedUserId,jdbcType=BIGINT},
+			</if>
+			<if test="orderNo != null">
+				#{orderNo,jdbcType=VARCHAR},
+			</if>
+			<if test="slcoinShopId != null">
+				#{slcoinShopId,jdbcType=BIGINT},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=TINYINT},
+			</if>
+			<if test="amount != null">
+				#{amount,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=TINYINT},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+  	
+</mapper>

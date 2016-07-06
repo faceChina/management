@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jzwgj.management.mapper.GwInformationMapper" >
+  <resultMap id="BaseResultMap" type="com.jzwgj.management.server.web.information.domain.GwInformation" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="ANNOUNCER" property="announcer" jdbcType="VARCHAR" />
+    <result column="TITLE" property="title" jdbcType="VARCHAR" />
+    <result column="PIC_PATH" property="picPath" jdbcType="VARCHAR" />
+    <result column="SOURCE" property="source" jdbcType="VARCHAR" />
+    <result column="SEO_TITLE" property="seoTitle" jdbcType="VARCHAR" />
+    <result column="SEO_KEYWORDS" property="seoKeywords" jdbcType="VARCHAR" />
+    <result column="SEO_DESCRIPTION" property="seoDescription" jdbcType="VARCHAR" />
+    <result column="SORT" property="sort" jdbcType="BIGINT" />
+    <result column="STATUS" property="status" jdbcType="INTEGER" />
+    <result column="PUBLISH_TIME" property="publishTime" jdbcType="TIMESTAMP" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="SUMMARY" property="summary" jdbcType="LONGVARCHAR" />
+    <result column="CONTENT" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, ANNOUNCER, TITLE, PIC_PATH, SOURCE, SEO_TITLE, SEO_KEYWORDS, SEO_DESCRIPTION, 
+    SORT, STATUS, PUBLISH_TIME, CREATE_TIME, UPDATE_TIME, SUMMARY, CONTENT
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from gw_information
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  	<update id="delete" parameterType="java.lang.Long" >
+    	update gw_information set status = -1 where ID = #{id,jdbcType=BIGINT}
+  	</update>
+  	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    	delete  from gw_information
+    where ID = #{id,jdbcType=BIGINT}
+  	</delete>
+  	<insert id="insert" parameterType="com.jzwgj.management.server.web.information.domain.GwInformation" >
+  		<selectKey keyProperty="id" resultType="long" order="AFTER">
+			SELECT LAST_INSERT_ID();
+		</selectKey>
+    	insert into gw_information (ID, ANNOUNCER, TITLE, 
+	      			PIC_PATH, SOURCE, SEO_TITLE, 
+	      			SEO_KEYWORDS, SEO_DESCRIPTION, SORT, 
+	      			STATUS, PUBLISH_TIME, CREATE_TIME, 
+	      			UPDATE_TIME, SUMMARY, CONTENT
+   				)
+    	values (#{id,jdbcType=BIGINT}, #{announcer,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
+      			#{picPath,jdbcType=VARCHAR}, #{source,jdbcType=VARCHAR}, #{seoTitle,jdbcType=VARCHAR}, 
+      			#{seoKeywords,jdbcType=VARCHAR}, #{seoDescription,jdbcType=VARCHAR}, #{sort,jdbcType=BIGINT}, 
+      			#{status,jdbcType=INTEGER}, #{publishTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
+      			#{updateTime,jdbcType=TIMESTAMP}, #{summary,jdbcType=LONGVARCHAR}, #{content,jdbcType=LONGVARCHAR}
+      	)
+  	</insert>
+  <insert id="insertSelective" parameterType="com.jzwgj.management.server.web.information.domain.GwInformation" >
+    insert into gw_information
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="announcer != null" >
+        ANNOUNCER,
+      </if>
+      <if test="title != null" >
+        TITLE,
+      </if>
+      <if test="picPath != null" >
+        PIC_PATH,
+      </if>
+      <if test="source != null" >
+        SOURCE,
+      </if>
+      <if test="seoTitle != null" >
+        SEO_TITLE,
+      </if>
+      <if test="seoKeywords != null" >
+        SEO_KEYWORDS,
+      </if>
+      <if test="seoDescription != null" >
+        SEO_DESCRIPTION,
+      </if>
+      <if test="sort != null" >
+        SORT,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="publishTime != null" >
+        PUBLISH_TIME,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME,
+      </if>
+      <if test="summary != null" >
+        SUMMARY,
+      </if>
+      <if test="content != null" >
+        CONTENT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="announcer != null" >
+        #{announcer,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="picPath != null" >
+        #{picPath,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="seoTitle != null" >
+        #{seoTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="seoKeywords != null" >
+        #{seoKeywords,jdbcType=VARCHAR},
+      </if>
+      <if test="seoDescription != null" >
+        #{seoDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="publishTime != null" >
+        #{publishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="summary != null" >
+        #{summary,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jzwgj.management.server.web.information.domain.GwInformation" >
+    update gw_information
+    <set >
+      <if test="announcer != null" >
+        ANNOUNCER = #{announcer,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        TITLE = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="picPath != null" >
+        PIC_PATH = #{picPath,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        SOURCE = #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="seoTitle != null" >
+        SEO_TITLE = #{seoTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="seoKeywords != null" >
+        SEO_KEYWORDS = #{seoKeywords,jdbcType=VARCHAR},
+      </if>
+      <if test="seoDescription != null" >
+        SEO_DESCRIPTION = #{seoDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        SORT = #{sort,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="publishTime != null" >
+        PUBLISH_TIME = #{publishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="summary != null" >
+        SUMMARY = #{summary,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="content != null" >
+        CONTENT = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jzwgj.management.server.web.information.domain.GwInformation" >
+    update gw_information
+    set ANNOUNCER = #{announcer,jdbcType=VARCHAR},
+      TITLE = #{title,jdbcType=VARCHAR},
+      PIC_PATH = #{picPath,jdbcType=VARCHAR},
+      SOURCE = #{source,jdbcType=VARCHAR},
+      SEO_TITLE = #{seoTitle,jdbcType=VARCHAR},
+      SEO_KEYWORDS = #{seoKeywords,jdbcType=VARCHAR},
+      SEO_DESCRIPTION = #{seoDescription,jdbcType=VARCHAR},
+      SORT = #{sort,jdbcType=BIGINT},
+      STATUS = #{status,jdbcType=INTEGER},
+      PUBLISH_TIME = #{publishTime,jdbcType=TIMESTAMP},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      SUMMARY = #{summary,jdbcType=LONGVARCHAR},
+      CONTENT = #{content,jdbcType=LONGVARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  
+  	<select id="getCount" resultType="java.lang.Integer">
+  		select count(1) from gw_information 
+  		<where>
+	  		<if test="title != null">
+		  	 	title like concat("%",#{title},"%")
+	  		</if>
+	  		<choose>
+		  		<when test="status != null and status > -1">
+		  			and status=#{status}
+		  		</when>
+		  		<otherwise>
+		  			and status>-1
+		  		</otherwise>
+		  	</choose>
+	  	</where>
+  	</select>
+  	<select id="findGwInformationPageList" resultMap="BaseResultMap" parameterType="java.util.Map">
+  		select 
+  			<include refid="Base_Column_List"/> 
+  			from gw_information 
+  		<where>
+	  		<if test="gwInformation.title != null">
+		  		title like concat("%",#{gwInformation.title},"%")
+	  		</if>
+	  		<choose>
+		  		<when test="gwInformation.status != null and gwInformation.status > -1">
+		  			and status=#{gwInformation.status}
+		  		</when>
+		  		<otherwise>
+		  			and status>-1
+		  		</otherwise>
+	  		</choose>
+  		</where> 
+  		order by sort ,publish_time desc,create_time desc
+  		limit #{start},#{pageSize}
+  	</select>
+  	<!-- 查询最大排序 -->
+  	<select id="getMaxSort" resultType="java.lang.Long">
+     	select
+	          max(sort)
+	   	from
+	          gw_information
+  	</select>
+  	<!-- 查询最大排序 -->
+  	<select id="getMinSort" resultType="java.lang.Long">
+     	select
+	          min(sort)
+	   	from
+	          gw_information
+  	</select>
+  	<!-- 重新排序 -->
+  	<update id="anewSort" parameterType="java.lang.Long">
+  		update gw_information set sort = sort+1 where id != #{id,jdbcType=BIGINT}
+  	</update>
+</mapper>

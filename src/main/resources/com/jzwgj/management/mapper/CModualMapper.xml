@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jzwgj.management.mapper.CModualMapper" >
+  <resultMap id="BaseResultMap" type="com.jzwgj.management.server.sys.domain.CModual" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="URL" property="url" jdbcType="VARCHAR" />
+    <result column="SORT" property="sort" jdbcType="INTEGER" />
+    <result column="PID" property="pid" jdbcType="BIGINT" />
+    <result column="PREMIER_ID" property="premierId" jdbcType="BIGINT" />
+    <result column="ICON" property="icon" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, NAME, CODE, URL, SORT, PID, PREMIER_ID, ICON
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from c_modual
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectChildCount" resultType="java.lang.Integer" parameterType="java.lang.Long">
+    select COUNT(ID)
+    from c_modual
+    where PID = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectList" resultMap="BaseResultMap" parameterType="com.jzwgj.management.server.sys.domain.CModual" >
+    select 
+    <include refid="Base_Column_List" />
+    from c_modual
+    <where>
+    	<if test="pid!= null">
+    	 AND PID = #{pid,jdbcType=BIGINT}
+    	</if>
+    </where>
+    order by SORT
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from c_modual
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.jzwgj.management.server.sys.domain.CModual" >
+        <selectKey keyProperty="id" resultType="long" order="AFTER">  
+        SELECT LAST_INSERT_ID();  
+    </selectKey> 
+    insert into c_modual (ID, NAME, CODE, 
+      URL, SORT, PID, PREMIER_ID, 
+      ICON)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
+      #{url,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, #{pid,jdbcType=BIGINT}, #{premierId,jdbcType=BIGINT}, 
+      #{icon,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jzwgj.management.server.sys.domain.CModual" >
+        <selectKey keyProperty="id" resultType="long" order="AFTER">  
+        SELECT LAST_INSERT_ID();  
+    </selectKey> 
+    insert into c_modual
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="url != null" >
+        URL,
+      </if>
+      <if test="sort != null" >
+        SORT,
+      </if>
+      <if test="pid != null" >
+        PID,
+      </if>
+      <if test="premierId != null" >
+        PREMIER_ID,
+      </if>
+      <if test="icon != null" >
+        ICON,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="pid != null" >
+        #{pid,jdbcType=BIGINT},
+      </if>
+      <if test="premierId != null" >
+        #{premierId,jdbcType=BIGINT},
+      </if>
+      <if test="icon != null" >
+        #{icon,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jzwgj.management.server.sys.domain.CModual" >
+    update c_modual
+    <set >
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        CODE = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        URL = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        SORT = #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="pid != null" >
+        PID = #{pid,jdbcType=BIGINT},
+      </if>
+      <if test="premierId != null" >
+        PREMIER_ID = #{premierId,jdbcType=BIGINT},
+      </if>
+      <if test="icon != null" >
+        ICON = #{icon,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jzwgj.management.server.sys.domain.CModual" >
+    update c_modual
+    set NAME = #{name,jdbcType=VARCHAR},
+      CODE = #{code,jdbcType=VARCHAR},
+      URL = #{url,jdbcType=VARCHAR},
+      SORT = #{sort,jdbcType=INTEGER},
+      PID = #{pid,jdbcType=BIGINT},
+      PREMIER_ID = #{premierId,jdbcType=BIGINT},
+      ICON = #{icon,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

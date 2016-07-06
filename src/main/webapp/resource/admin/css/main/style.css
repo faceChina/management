@@ -1,0 +1,23 @@
+html, ul, li, p, h1, h2, h3, h4, h5, h6, form, fieldset, td, img, dl, dt, dd {margin: 0;padding: 0;border: 0;}
+body{font-size:12px;margin: 0 auto;padding: 0;border: 0; color:#222;}
+ul{list-style-type:none;}
+select,input{vertical-align:middle;}
+img {border:none;}
+a{text-decoration: none; color:#222;}
+a:hover {text-decoration: underline; color:#FF0000}
+table {border: 0; margin: 0; padding: 0; border-collapse : collapse; }
+td,th{vertical-align:top}
+
+.top { height:72px; background:url(top_bg.jpg) repeat-x;}
+.top span{ float:right;color:#093f88; overflow:hidden; clear:both;}
+.nav{ background:url(nav_on.jpg) repeat-x; height:30px;}
+.span { background:url(images/icon.jpg) no-repeat; width:26px; height:28px; padding-top:5px; padding-left:30px; font-size:12px;}
+.nav_on{}
+.nav_on ul{ margin:0 0 5px 0;}
+.nav_on  li{float:left; list-style:none; padding:0 3px; font-size:12px; }
+.nav_on li a{  float:left;color:#093f88; text-decoration:none;}
+.nav_on li a:hover{ color:#FF0000; text-decoration:none;}
+.color {color: #FF0000; padding-right:20px; font-size:12px}
+.color  a{color: #FF0000; text-decoration:none;}
+.color  a:hover{color:#093f88; text-decoration:none; }
+-->

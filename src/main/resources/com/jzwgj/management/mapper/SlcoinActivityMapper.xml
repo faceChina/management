@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jzwgj.management.mapper.SlcoinActivityMapper" >
+  	<resultMap id="BaseResultMap" type="com.jzwgj.management.server.web.activity.domain.SlcoinActivity" >
+	    <id column="ID" property="id" jdbcType="BIGINT" />
+	    <result column="NAME" property="name" jdbcType="VARCHAR" />
+	    <result column="STATUS" property="status" jdbcType="INTEGER" />
+	    <result column="INVITE_AMOUNT" property="inviteAmount" jdbcType="INTEGER" />
+	    <result column="REGISTER_AMOUNT" property="registerAmount" jdbcType="INTEGER" />
+	    <result column="SUPER_AMOUNT" property="superAmount" jdbcType="INTEGER" />
+	    <result column="BEGIN_TIME" property="beginTime" jdbcType="TIMESTAMP" />
+	    <result column="END_TIME" property="endTime" jdbcType="TIMESTAMP" />
+	    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+	    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+  	</resultMap>
+ 	<resultMap id="BaseResultVoMap" type="com.jzwgj.management.server.web.activity.domain.SlcoinActivityVo" extends="BaseResultMap" >
+ 	
+  	</resultMap>
+  	<sql id="Base_Column_List" >
+    	ID, NAME, STATUS, INVITE_AMOUNT, REGISTER_AMOUNT,SUPER_AMOUNT, BEGIN_TIME, END_TIME, CREATE_TIME,UPDATE_TIME
+  	</sql>
+  	
+  	<select id="getCount" resultType="java.lang.Integer">
+  		select count(1) from slcoin_activity where STATUS = 1
+  	</select>
+  	
+  	<select id="findSlcoinActivityPageList" resultMap="BaseResultVoMap" parameterType="java.util.Map">
+  		select 
+  			<include refid="Base_Column_List"/> 
+  		from slcoin_activity 
+  		
+		where STATUS = 1
+		
+  		order by END_TIME desc, create_time desc
+  		
+  		limit #{start},#{pageSize}
+  	</select>
+  	
+  	<insert id="insertSelective" parameterType="com.jzwgj.management.server.web.activity.domain.SlcoinActivity" >
+    	<selectKey keyProperty="id" resultType="long" order="AFTER">
+			SELECT LAST_INSERT_ID();
+		</selectKey>
+    	insert into slcoin_activity
+    	<trim prefix="(" suffix=")" suffixOverrides="," >
+      		<if test="name != null" >
+        		NAME,
+      		</if>
+      		<if test="status != null" >
+        		STATUS,
+      		</if>
+      		<if test="inviteAmount != null" >
+        		INVITE_AMOUNT,
+      		</if>
+      		<if test="registerAmount != null" >
+        		REGISTER_AMOUNT,
+      		</if>
+      		<if test="superAmount != null" >
+        		SUPER_AMOUNT,
+      		</if>
+      		<if test="beginTime != null" >
+        		BEGIN_TIME,
+      		</if>
+	      	<if test="endTime != null" >
+	        	END_TIME,
+	      	</if>
+      		<if test="createTime != null" >
+        		CREATE_TIME,
+      		</if>
+      		<if test="updateTime != null" >
+        		UPDATE_TIME,
+      		</if>
+   		</trim>
+    	<trim prefix="values (" suffix=")" suffixOverrides="," >
+      		<if test="id != null" >
+        		#{id,jdbcType=BIGINT},
+      		</if>
+      		<if test="name != null" >
+        		#{name,jdbcType=VARCHAR},
+      		</if>
+      		<if test="status != null" >
+        		#{status,jdbcType=INTEGER},
+      		</if>
+      		<if test="inviteAmount != null" >
+        		#{inviteAmount,jdbcType=INTEGER},
+      		</if>
+	      	<if test="registerAmount != null" >
+	        	#{registerAmount,jdbcType=INTEGER},
+	      	</if>
+	      	<if test="superAmount != null" >
+	        	#{superAmount,jdbcType=INTEGER},
+	      	</if>
+	      	<if test="beginTime != null" >
+	        	#{beginTime,jdbcType=TIMESTAMP},
+	      	</if>
+	      	<if test="endTime != null" >
+	        	#{endTime,jdbcType=TIMESTAMP},
+	      	</if>
+	      	<if test="createTime != null" >
+	        	#{createTime,jdbcType=TIMESTAMP},
+	      	</if>
+	      	<if test="updateTime != null" >
+	        	#{updateTime,jdbcType=TIMESTAMP},
+	      	</if>
+    	</trim>
+  	</insert>
+  	
+  	<!-- 查询特定的时间点是否有活动存在 -->
+  	<select id="getPointInTime" resultType="java.lang.Integer" parameterType="java.util.Map" >
+    	SELECT count(1) FROM slcoin_activity WHERE END_TIME >= DATE_FORMAT(#{beginTime,jdbcType=TIMESTAMP},'%Y-%m-%d %H:%i:%S') 
+    									and BEGIN_TIME &lt;= DATE_FORMAT(#{endTime,jdbcType=TIMESTAMP},'%Y-%m-%d %H:%i:%S') 
+    									<if test="id != null">
+    										and id != #{id,jdbcType=BIGINT}
+    									</if>
+  	</select>
+  	
+  	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    	select 
+    		<include refid="Base_Column_List" />
+    	from slcoin_activity
+   	 	where ID = #{id,jdbcType=BIGINT}
+  	</select>
+  	
+  	<update id="updateByPrimaryKeySelective" parameterType="com.jzwgj.management.server.web.activity.domain.SlcoinActivity" >
+    	update slcoin_activity
+    	<set>
+      		<if test="name != null" >
+        		NAME = #{name,jdbcType=VARCHAR},
+	      	</if>
+	      	<if test="status != null" >
+	        	STATUS = #{status,jdbcType=INTEGER},
+	      	</if>
+	      	<if test="inviteAmount != null" >
+	        	INVITE_AMOUNT = #{inviteAmount,jdbcType=INTEGER},
+	      	</if>
+	      	<if test="registerAmount != null" >
+	        	REGISTER_AMOUNT = #{registerAmount,jdbcType=INTEGER},
+	      	</if>
+	      	<if test="superAmount != null" >
+	        	SUPER_AMOUNT = #{superAmount,jdbcType=INTEGER},
+	      	</if>
+	      	<if test="beginTime != null" >
+	        	BEGIN_TIME = #{beginTime,jdbcType=TIMESTAMP},
+	      	</if>
+	      	<if test="endTime != null" >
+	        	END_TIME = #{endTime,jdbcType=TIMESTAMP},
+	      	</if>
+	      	<if test="createTime != null" >
+	        	CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+	      	</if>
+	      	<if test="updateTime != null" >
+	        	UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+	      	</if>
+    	</set>
+	    where ID = #{id,jdbcType=BIGINT}
+  	</update>
+</mapper>

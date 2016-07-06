@@ -1,0 +1,179 @@
+@charset "utf-8";
+/*  
+* @description: 预览公用样式
+* @author: sf
+* @update:
+*/
+body{
+ 	font-size:14px;
+ }
+
+ body,p,img{
+ 	margin: 0;
+ 	padding: 0;
+ }
+
+.slideBox,.container{
+ 	margin:0;
+ }
+.container{ 
+	width: 320px;
+	min-width: 320px;
+}
+.outbox{
+	width:379px;
+	height:770px;
+	overflow:hidden;
+	background:url(../main/bg-iphone320.png) no-repeat;
+    position: relative;
+    margin: auto;
+}
+.inbox{
+	width:320px;
+	height:500px;
+	margin:100px auto 0;
+	padding-top:64px;
+	background:#F4F4F4;
+	position:relative;
+}
+.inbox iframe{
+	width: 100%;
+	height: 100%;
+}
+/* 微信的头部 */
+.wxhead{
+	width: 320px;
+	height: 64px;
+	background: url(../main/wxhead.jpg) no-repeat;
+	overflow: hidden;
+	position: absolute;
+	top: 100px;
+	left:30px;
+	text-align: center;
+	z-index: 99;
+	line-height: 85px;
+	color: #fff;
+}
+.wxhead-title{
+	width:320px;
+	text-align:center;
+	margin: 0;
+	padding: 0;
+}
+
+/* 详情页 样式 */
+.details {}
+
+.details-title {
+	margin-top: 15px;
+	padding: 0 4% 10px;
+	border-bottom: 1px solid #d0d0d0;
+}
+.details-title h3{
+   font-family: 微软雅黑;
+   font-size: 18px;
+   line-height: 26px;
+   padding-bottom: 5px;
+}
+.details-title h4 {
+	padding-top: 5px;
+	color: #999;
+	font-weight:normal;
+}
+.details-title h4 .time{
+	padding-right: 10px;
+}
+.details-center {
+	padding: 0 4% 10px;
+/* 	border-bottom: 1px solid #d0d0d0; */
+}
+.details-center p {
+	margin-top: 15px;
+	line-height: 25px;
+}
+.details-center img {
+	max-width: 100%;
+	width:100%;
+}
+.details-center a {
+	display: block;
+	text-align: right;
+}
+.details-center a:hover {
+	color: #d60935;
+}
+/* 详情页 样式 end */
+
+/* 文本排版方式 */
+.txt-rowspan1,
+.txt-rowspan2,
+.txt-rowspan3{
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+.txt-rowspan1{
+	-webkit-line-clamp: 1;
+}
+.txt-rowspan2{
+	-webkit-line-clamp: 2;
+}
+.txt-rowspan3{
+	-webkit-line-clamp: 3;
+}
+/* 文本排版方式 end */
+
+.m-graphic{
+	border:1px solid #ccc;
+	margin: 7px;
+	padding: 7px;
+	line-height: 1.5em;
+
+}
+.graphic-big{
+	position: relative;
+	display: block;
+}
+.graphic-big .title{
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-color: rgba(0,0,0,.5);
+	color: #fff;
+	padding: 4px;
+}
+.graphic-big .pic{
+	width: 100%;
+	height: 51.28205128205128vw;
+	overflow: hidden;
+
+}
+.graphic-big img{
+	width: 100%;
+	min-width: 290px;
+	display: block;
+	overflow: hidden;
+}
+.graphic-item{
+	overflow: hidden;
+	display: block;
+	text-decoration: inherit;
+	border-top: 1px solid #ddd;
+	padding: 10px 0 0;
+	margin: 10px 0 0;
+}
+.graphic-item .pic{
+	float: right;
+	width: 60px;
+	height: 60px;
+}
+.graphic-item .title{
+	margin: 8px 0;
+	color: #333;
+
+}
+.graphic-item .pic img{
+	width: 100%;
+	height: 100%;
+}

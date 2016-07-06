@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jzwgj.management.mapper.SlcoinShopMapper" >
+  	<resultMap id="BaseResultMap" type="com.jzwgj.management.server.web.activity.domain.SlcoinShop" >
+	    <id column="ID" property="id" jdbcType="BIGINT" />
+	    <result column="SHOP_NO" property="shopNo" jdbcType="VARCHAR" />
+	    <result column="NAME" property="name" jdbcType="VARCHAR" />
+	    <result column="PICTURE_PATH" property="picturePath" jdbcType="VARCHAR" />
+	    <result column="URL" property="url" jdbcType="VARCHAR" />
+	    <result column="MAX_DISCOUNT" property="maxDiscount" jdbcType="INTEGER" />
+	    <result column="STATUS" property="status" jdbcType="INTEGER" />
+	    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+	    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+  	</resultMap>
+  	<resultMap id="BaseResultVoMap" type="com.jzwgj.management.server.web.activity.domain.SlcoinShopVo" extends="BaseResultMap" >
+	    <result column="total" property="total" jdbcType="INTEGER" />
+  	</resultMap>
+  	
+  	<sql id="Base_Column_List" >
+    	ID, SHOP_NO, NAME, PICTURE_PATH, URL, MAX_DISCOUNT, STATUS, CREATE_TIME, UPDATE_TIME
+  	</sql>
+  	
+  	<sql id="queryObjWhereClause">
+  		<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(slcoinRecord.beginTime)">
+  			and DATE_FORMAT(CREATE_TIME,'%Y-%m-%d') >= DATE_FORMAT(#{slcoinRecord.beginTime,jdbcType=VARCHAR},'%Y-%m-%d')
+  		</if>
+  		<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(slcoinRecord.endTime)">
+  			and DATE_FORMAT(CREATE_TIME,'%Y-%m-%d') &lt;= DATE_FORMAT(#{slcoinRecord.endTime,jdbcType=VARCHAR},'%Y-%m-%d')
+  		</if> 
+  	</sql>
+  
+  	<select id="getCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+  		select count(1)
+  			from 
+				(select sum(amount) total,slcoin_shop_id from slcoin_record where status=1 and type=2
+				
+				<include refid="queryObjWhereClause"/>
+		  		
+				group by slcoin_shop_id) as temp1
+			left outer join 
+				(select sum(amount) total,slcoin_shop_id from slcoin_record where status=1 and type=3
+				
+				<include refid="queryObjWhereClause"/>
+				  
+				group by slcoin_shop_id) as temp2
+			on temp1.slcoin_shop_id = temp2.slcoin_shop_id
+			join slcoin_shop on temp1.SLCOIN_SHOP_ID = slcoin_shop.ID
+  	</select>
+  	
+  	<select id="findSlcoinShopByPageList" resultMap="BaseResultVoMap" parameterType="java.util.Map">
+  		select temp1.total-if(temp2.total is null,0,temp2.total) as total,slcoin_shop.*
+  			from 
+				(select sum(amount) total,slcoin_shop_id from slcoin_record where status=1 and type=2
+				
+				<include refid="queryObjWhereClause"/>
+		  		
+				group by slcoin_shop_id) as temp1
+			left outer join 
+				(select sum(amount) total,slcoin_shop_id from slcoin_record where status=1 and type=3
+				
+				<include refid="queryObjWhereClause"/>
+				  
+				group by slcoin_shop_id) as temp2
+			on temp1.slcoin_shop_id = temp2.slcoin_shop_id
+			join slcoin_shop on temp1.SLCOIN_SHOP_ID = slcoin_shop.ID
+  	</select>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from slcoin_shop
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from slcoin_shop
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.jzwgj.management.server.web.activity.domain.SlcoinShop" >
+    insert into slcoin_shop (ID, SHOP_NO, NAME, 
+      PICTURE_PATH, URL, MAX_DISCOUNT, 
+      STATUS, CREATE_TIME, UPDATE_TIME
+      )
+    values (#{id,jdbcType=BIGINT}, #{shopNo,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{picturePath,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{maxDiscount,jdbcType=INTEGER}, 
+      #{status,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jzwgj.management.server.web.activity.domain.SlcoinShop" >
+    insert into slcoin_shop
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="shopNo != null" >
+        SHOP_NO,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="picturePath != null" >
+        PICTURE_PATH,
+      </if>
+      <if test="url != null" >
+        URL,
+      </if>
+      <if test="maxDiscount != null" >
+        MAX_DISCOUNT,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="picturePath != null" >
+        #{picturePath,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="maxDiscount != null" >
+        #{maxDiscount,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jzwgj.management.server.web.activity.domain.SlcoinShop" >
+    update slcoin_shop
+    <set >
+      <if test="shopNo != null" >
+        SHOP_NO = #{shopNo,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="picturePath != null" >
+        PICTURE_PATH = #{picturePath,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        URL = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="maxDiscount != null" >
+        MAX_DISCOUNT = #{maxDiscount,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jzwgj.management.server.web.activity.domain.SlcoinShop" >
+    update slcoin_shop
+    set SHOP_NO = #{shopNo,jdbcType=VARCHAR},
+      NAME = #{name,jdbcType=VARCHAR},
+      PICTURE_PATH = #{picturePath,jdbcType=VARCHAR},
+      URL = #{url,jdbcType=VARCHAR},
+      MAX_DISCOUNT = #{maxDiscount,jdbcType=INTEGER},
+      STATUS = #{status,jdbcType=TINYINT},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

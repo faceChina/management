@@ -1,0 +1,10 @@
+@charset "utf-8";
+/*  
+* @description: 管理系统
+* @author: zzh
+* @update:
+*/
+.container{ 
+	width: 90%;
+	min-width: 1000px;
+}

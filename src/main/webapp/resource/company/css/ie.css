@@ -1,0 +1,18 @@
+.slider .bd li .bg-fig{
+	background:url(../img/banner.jpg) no-repeat center;
+}
+.slider .bd li .bg-fig1{
+	background:url(../img/banner8.jpg) no-repeat center;
+}
+.slider .bd li .bg-fig2{
+	background:url(../img/banner9.jpg) no-repeat center;
+}
+.slider .bd li .bg-fig3{
+	background:url(../img/banner10.jpg) no-repeat center;
+}
+.product_list{
+	background:url(img/p_bg.jpg) repeat-x;
+}
+.case-head ul li.nomr,.case-mid ul li.nomr{
+	margin-right:0;
+}

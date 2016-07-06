@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jzwgj.management.mapper.CAttachmentMapper" >
+  <resultMap id="BaseResultMap" type="com.jzwgj.management.server.sys.domain.CAttachment" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="MEMO" property="memo" jdbcType="VARCHAR" />
+    <result column="TABLE_NAME" property="tableName" jdbcType="VARCHAR" />
+    <result column="TABLE_ID" property="tableId" jdbcType="BIGINT" />
+    <result column="PATH" property="path" jdbcType="VARCHAR" />
+    <result column="FILE_TYPE" property="fileType" jdbcType="VARCHAR" />
+    <result column="FILE_SIZE" property="fileSize" jdbcType="BIGINT" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="DATE" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="DATE" />
+    <result column="TYPE" property="type" jdbcType="INTEGER" />
+    <result column="IS_USER" property="isUser" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, NAME, MEMO, TABLE_NAME, TABLE_ID, PATH, FILE_TYPE, FILE_SIZE, CREATE_TIME, UPDATE_TIME, 
+    TYPE, IS_USER
+  </sql>
+  <select id="getTitleImg" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from c_attachment
+    where TYPE = 1 and TABLE_ID = #{tableId,jdbcType=BIGINT}
+  </select>
+  <select id="getQrImg" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from c_attachment
+    where TYPE =3 and TABLE_ID = #{tableId,jdbcType=BIGINT}
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from c_attachment
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectList" resultMap="BaseResultMap" parameterType="com.jzwgj.management.server.sys.domain.CAttachment" >
+    select 
+    <include refid="Base_Column_List" />
+    from c_attachment
+    where TYPE = 2
+	 <if test="tableName != null ">
+	 	AND TABLE_NAME = #{tableName,jdbcType=VARCHAR}
+	 </if>   
+	 <if test="tableId != null ">
+	 	AND TABLE_ID = #{tableId,jdbcType=BIGINT}
+	 </if>   
+  </select>
+  
+  <select id="selectPageList" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="Base_Column_List" />
+    from c_attachment
+    <where>
+    	<if test="pojo.tableId != null">
+    	TABLE_ID = #{pojo.tableId,jdbcType=BIGINT}
+    	</if>
+    </where>
+    order by update_time desc
+    limit ${start},${pageSize}
+  </select>
+  
+  <select id="selectCount" resultType="java.lang.Integer" parameterType="java.util.Map" >
+    select Count(ID)
+    from c_attachment
+    <where>
+    	<if test="pojo.tableId != null">
+    	TABLE_ID = #{pojo.tableId,jdbcType=BIGINT}
+    	</if>
+    </where>
+    order by update_time desc
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from c_attachment
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+    <delete id="deleteByTableIdAndType" parameterType="java.util.Map" >
+    delete from c_attachment
+    where TYPE =#{type,jdbcType=INTEGER} and TABLE_ID = #{tableId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.jzwgj.management.server.sys.domain.CAttachment" >
+            <selectKey keyProperty="id" resultType="long" order="AFTER">  
+        SELECT LAST_INSERT_ID();  
+    </selectKey> 
+    insert into c_attachment (ID, NAME, MEMO, 
+      TABLE_NAME, TABLE_ID, PATH, 
+      FILE_TYPE, FILE_SIZE, CREATE_TIME, 
+      UPDATE_TIME, TYPE, IS_USER
+      )
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR}, 
+      #{tableName,jdbcType=VARCHAR}, #{tableId,jdbcType=BIGINT}, #{path,jdbcType=VARCHAR}, 
+      #{fileType,jdbcType=VARCHAR}, #{fileSize,jdbcType=BIGINT}, #{createTime,jdbcType=DATE}, 
+      #{updateTime,jdbcType=DATE}, #{type,jdbcType=INTEGER}, #{isUser,jdbcType=INTEGER}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.jzwgj.management.server.sys.domain.CAttachment" >
+   <selectKey keyProperty="id" resultType="long" order="AFTER">  
+        SELECT LAST_INSERT_ID();  
+    </selectKey> 
+    insert into c_attachment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="memo != null" >
+        MEMO,
+      </if>
+      <if test="tableName != null" >
+        TABLE_NAME,
+      </if>
+      <if test="tableId != null" >
+        TABLE_ID,
+      </if>
+      <if test="path != null" >
+        PATH,
+      </if>
+      <if test="fileType != null" >
+        FILE_TYPE,
+      </if>
+      <if test="fileSize != null" >
+        FILE_SIZE,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="isUser != null" >
+        IS_USER,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="memo != null" >
+        #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="tableName != null" >
+        #{tableName,jdbcType=VARCHAR},
+      </if>
+      <if test="tableId != null" >
+        #{tableId,jdbcType=BIGINT},
+      </if>
+      <if test="path != null" >
+        #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="fileType != null" >
+        #{fileType,jdbcType=VARCHAR},
+      </if>
+      <if test="fileSize != null" >
+        #{fileSize,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=DATE},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=DATE},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="isUser != null" >
+        #{isUser,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jzwgj.management.server.sys.domain.CAttachment" >
+    update c_attachment
+    <set >
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="memo != null" >
+        MEMO = #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="tableName != null" >
+        TABLE_NAME = #{tableName,jdbcType=VARCHAR},
+      </if>
+      <if test="tableId != null" >
+        TABLE_ID = #{tableId,jdbcType=BIGINT},
+      </if>
+      <if test="path != null" >
+        PATH = #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="fileType != null" >
+        FILE_TYPE = #{fileType,jdbcType=VARCHAR},
+      </if>
+      <if test="fileSize != null" >
+        FILE_SIZE = #{fileSize,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=DATE},
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME = #{updateTime,jdbcType=DATE},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="isUser != null" >
+        IS_USER = #{isUser,jdbcType=INTEGER},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+   <update id="editTableId" parameterType="java.util.Map" >
+    update c_attachment
+    set TABLE_ID = #{tempTableId,jdbcType=BIGINT},
+    where TABLE_ID = #{tableId,jdbcType=BIGINT}
+  </update>
+ <update id="updateByPrimaryKey" parameterType="com.jzwgj.management.server.sys.domain.CAttachment" >
+    update c_attachment
+    set NAME = #{name,jdbcType=VARCHAR},
+      MEMO = #{memo,jdbcType=VARCHAR},
+      TABLE_NAME = #{tableName,jdbcType=VARCHAR},
+      TABLE_ID = #{tableId,jdbcType=BIGINT},
+      PATH = #{path,jdbcType=VARCHAR},
+      FILE_TYPE = #{fileType,jdbcType=VARCHAR},
+      FILE_SIZE = #{fileSize,jdbcType=BIGINT},
+      CREATE_TIME = #{createTime,jdbcType=DATE},
+      UPDATE_TIME = #{updateTime,jdbcType=DATE},
+      TYPE = #{type,jdbcType=INTEGER},
+      IS_USER = #{isUser,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,515 @@
+@charset "utf-8";body,p,h1,h2,h3,h4,h5,h6,img,ul,ol,li,dl,dt,dd,table,th,td,form,fieldset,legend,input,textarea,button,select{
+    margin: 0;
+    padding: 0
+}
+h1,h2,h3,h4,h5,h6{
+	font-weight:normal;
+}
+body,input,textarea,select,button,table {
+    font-size: 14px;
+}
+body {
+    font-family: '微软雅黑';
+    color: #333;
+}
+img,fieldset {
+    border: 0
+}
+ul,ol {
+    list-style: none
+}
+em,address{
+    font-style: normal;
+}
+a{
+    color: #333;
+    text-decoration: none;
+    transition:color 0.75s;
+}
+a{
+	-moz-transition:color 0.3s ease-out;
+	-webkit-transition:color 0.3s ease-out;
+	-o-transition:color 0.3s ease-out;
+	-ms-transition:color 0.3s ease-out;
+	transition:color 0.3s ease-out;
+}
+a:hover{
+	color:#cc0000;
+}
+table {
+    border-collapse: collapse
+}
+h1,.h1{
+	font-size:36px;
+}
+h2,.h2 {
+  font-size: 30px;
+}
+
+h3,.h3 {
+  font-size: 24px;
+}
+
+h4,.h4 {
+  font-size: 18px;
+}
+
+h5,.h5 {
+  font-size: 14px;
+}
+
+h6,.h6 {
+  font-size: 12px;
+}
+/* 页面公用样式  */
+.clr-stress{
+	color:#c00;
+}
+.clr-default{
+	color:#333;
+}
+
+.case-hd ul li.current{
+	background:#c00;
+}
+.current a{
+	color:#fff;
+}
+.font-sm{
+	font-size:16px;
+}
+
+.bold{
+	font-weight:bold;
+}
+
+.mr-0{margin-right:0;}
+.mt-10{}
+.ml-10{}
+.mr-10{}
+.mb-10{}
+.pr-10{}
+.pl-10{}
+.pr-10{}
+.pb-10{}
+
+.left{
+	float:left;
+	display:inline;
+}
+.right{
+	float:right;
+	display:inline;
+}
+/* 页面公用样式 end */
+
+
+
+
+/* 头部  */
+.headerBox{
+	width:100%;
+	margin:0 auto;
+	position:absolute;
+	top:0;
+	z-index:3;
+}
+.header{
+	width:1000px;
+	margin:0 auto;
+}
+.title{
+	width:1000px;
+	height:30px;
+	margin:0 auto;
+	background:#cc0000;
+	line-height:30px;
+	color:#fff;
+}
+.title .title-left{
+	float:left;
+	display:inline;
+	padding-left:20px;
+	letter-spacing:2px;
+}
+.title .title-right{
+	float:right;
+	display:inline;
+}
+.title .title-right a{
+	color:#fff;
+	transtion:color 0.5s;
+}
+.title .title-right a:hover{
+	color:#fff;
+}
+.title .title-right span{
+	padding:0 20px;
+}
+
+/* 头部导航  */
+.head{
+	width:1000px;
+	height:80px;
+	margin:0 auto;
+	background-color:rgba(255,255,255,.4);
+	_background-color:#f3f3f3;
+	opacity:0.7;
+	color:#000;
+}
+.logo{
+	float:left;
+	display:inline;
+	width:270px;
+	overflow: hidden;
+}
+.logo img{
+	width:200px;
+	height:76px;
+	padding-left:10px;
+}
+.nav{
+	float:right;
+	display:inline;
+    position: relative;
+    width:730px;
+    height:80px;
+    overflow: hidden;
+}
+.nav ul{
+	width:700px;
+	height:30px;
+	margin:10px 0;
+	padding: 15px;
+}
+.nav ul li {
+    float: left;
+    display:inline;
+    width:100px;
+}
+.nav ul li.back {
+    position: absolute;
+    z-index:-10;
+    width:100px; 
+    height: 30px;
+    background:rgba(0,0,0,.1);
+    border-radius:50px;
+}
+.nav ul li a {
+    display:block;
+    width:100px;
+    height: 30px;
+    color: #626262;
+    line-height:30px;
+    cursor:pointer;
+    text-align:center;
+    transition:color 0.5s;
+}
+.nav ul li.current{
+	color:#cc3333;
+}
+/* 头部导航 end */
+
+/* 头部 end */
+/* 幻灯片  */
+.slider{
+	width:100%;
+	height:540px;
+	margin:0 auto;
+	position:relative;
+	top:0;
+	overflow:hidden;
+}
+.slider .bd{ 
+	position:relative;
+	z-index:0;
+}
+.slider .bd ul{ 
+	width: 100% !important;
+}
+.slider .bd li{
+	height:540px;
+	width: 100% !important;
+	overflow:hidden;
+}
+.slider .bd li img{
+	display:block;
+}
+.slider .bd li a{
+	display:block;
+	height:540px;
+}
+.slider .bd li:nth-child(0){
+	background:url(../img/banner.jpg) no-repeat center;
+}
+.slider .bd li:nth-child(1){
+	background:url(../img/banner8.jpg) no-repeat center;
+}
+.slider .bd li:nth-child(2){
+	background:url(../img/banner9.jpg) no-repeat center;
+}
+.slider .bd li:nth-child(3){
+	background:url(../img/banner10.jpg) no-repeat center;
+}
+/* 针对IE8兼容  */
+.slider .bd li:first-child{
+	background:url(../img/banner.jpg) no-repeat center;
+}
+.slider .bd li:first-child +li{
+	background:url(../img/banner8.jpg) no-repeat center;
+}
+.slider .bd li:first-child +li+li{
+	background:url(../img/banner9.jpg) no-repeat center;
+}
+.slider .bd li:first-child +li+li+li{
+	background:url(../img/banner10.jpg) no-repeat center;
+}
+.slider .hd{ 
+	width:100%;
+	height:30px;
+	position:absolute;
+	z-index:1;
+	bottom:0;
+	left:0;
+	line-height:30px; 
+}
+.slider .hd ul{ 
+	text-align:center;	
+}
+.slider .hd ul li{
+	display:inline-block; 
+	*display:inline;
+	width:11px; 
+	height:11px; 
+	margin:0 4px;
+	zoom:1; 
+    background:url(../img/dot.gif) 0 -14px;
+    overflow:hidden;
+    opacity:0.7;
+    vertical-align:top;
+    cursor:pointer;
+    line-height:9999px; 
+}
+.slider .hd ul .on{ 
+	background-position:0 0;
+}
+/* 幻灯片 end */
+/* 底部 */
+.footerBox{
+	width:100%;
+	margin:0 auto;
+	background:#999999;
+	overflow:hidden;
+}
+.footer{
+	width:1000px;
+	margin:0 auto;
+	height:36px;
+	line-height:36px;
+	color:#fff;
+	font-size:12px;
+}
+.footer ul{
+	float:left;
+	display:inline;
+	height:36px;
+}
+.footer ul li{
+	float:left;
+	display:inline;
+	width:70px;
+	height:36px;
+	line-height:36px;
+	font-size:12px;
+	text-align:center;
+	cursor:pointer;
+}
+.footer ul li a{
+	color:#fff;
+}
+.footer ul li a:hover{
+	color:#666;
+}
+.footer ul li span{
+	padding-left:10px;
+}
+.footer p{
+	text-align:right;
+}
+/* 底部 end */
+
+/* 页码  */
+.page{
+	width:350px;
+	height:27px;
+	margin:0 auto;
+	margin-top:30px;
+	overflow:hidden;
+}
+.page ul li{
+	float:left;
+	display:inline;
+}
+.page ul li a{
+	display:block;
+	height:25px;
+	padding:0 5px;
+	border:1px solid #eee;
+	line-height:25px;
+	transition:color 0s,background .2s;
+}
+.page ul li a:hover{
+	background:#cc0000;
+	border:1px solid #cc0000;
+	color:#fff;
+}
+.page ul li span{
+	padding:0 5px;
+}
+.page ul li input{
+	width:30px;
+	height:25px;
+	margin-right:5px;
+	border:1px solid #eee;
+	text-align:center;
+}
+/* 页码 end */
+
+/* 右侧导航  */
+.sidebar{
+	position:absolute;
+	top:310px;
+	right:10px;
+}
+.sidebar ul li{
+	width:60px;
+	height:60px;
+	border:1px solid #fff;
+	text-align:center;
+}
+.sidebar ul li a{
+	display:block;
+	width:40px;
+	height:50px;
+	background:rgba(204,204,204,.4);
+	padding:5px 10px;
+	line-height:25px;
+	text-align:center;
+	color:#fff;
+	font-size:16px;
+}
+.sidebar ul li a:hover{
+	background:#cc0000;
+	color:#fff;
+}
+.sidebar ul li a img{
+	padding-top:15px;
+	padding-left:5px;
+}
+/* 右侧导航 end */
+
+
+/*清除浮动*/
+.clearfix:before, .clearfix:after {
+    content:"";
+    display:table;
+}
+.clearfix:after{
+    clear:both;
+    overflow:hidden;
+}
+.clearfix{
+    zoom:1;
+}
+
+/* 提示框 */
+.aui_outer {
+	min-width: 300px;
+	background: #fff;
+	border:1px solid #ccc;
+	border-radius: 5px;
+	box-shadow:0px 0px 5px 5px rgba(0,0,0,0.1);
+	position: relative;
+}
+.aui_border{
+	width:100%;
+}
+.aui_inner{}
+.aui_dialog{
+	width:100%;
+}
+.aui_header{}
+.aui_titleBar {
+	width: 100%;
+	padding:0 10px;
+	font-size: 16px;
+	font-weight: bold;
+	line-height: 40px;
+	
+}
+.aui_title{}
+.aui_close {
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	width: 30px;
+	height: 30px;
+	font-size: 30px;
+	line-height: 30px;
+}
+.aui_main {
+	padding: 20px 0;
+	border-bottom:1px solid #ccc;
+	border-top:1px solid #ccc;
+}
+.aui_content {
+	font-size: 16px;
+}
+.aui_footer{}
+.aui_buttons {
+	width:100%;
+	padding:10px;
+	text-align:center;
+}
+.aui_buttons button {
+	background: #fff;
+	border:1px solid #ccc;
+	padding: 8px 16px;
+	border-radius: 5px;
+	margin: 0 5px;
+} 
+.aui_buttons button.aui_state_highlight {
+	background-color: #e52141;
+	color: #fff;
+}
+/* 全屏显示 按钮 样式 */
+.view-prev,.view-next{
+	width:40px;
+	height:40px;
+	overflow:hidden;
+	margin-left:-20px;
+	border-radius:100%;
+	background:#ccc\9;
+	background:rgba(0,0,0,0.1);
+	text-align:center;
+	line-height:40px;
+	text-decoration:none;
+	color:#fff\9;
+	color:rgba(255,255,255,0.5);
+	position:absolute;
+	-webkit-transition:background 1s; /* Safari and Chrome */
+	-moz-transition:background 1s; /* Firefox 4 */
+	-o-transition:background 1s; /* Opera */	
+	transition:background 1s;
+}
+.view-prev:hover,.view-next:hover{
+	background:rgba(0,0,0,0.5);
+}
+.view-prev{
+	top:10px;
+	left:50%;
+}
+.view-next{
+	bottom:10px;
+	left:50%;
+}

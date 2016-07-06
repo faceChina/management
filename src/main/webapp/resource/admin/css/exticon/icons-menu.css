@@ -1,0 +1,36 @@
+.organ_menu{
+	background-image:url(menuIcon/organ_menu.png) !important;
+}
+.module_menu{
+	background-image:url(menuIcon/module_menu.png) !important;
+}
+.organpost_menu{
+	background-image:url(menuIcon/organpost_menu.gif) !important;
+}
+.organuser_menu{
+	background-image:url(menuIcon/organuser_menu.png) !important;
+}
+.postuser_menu{
+	background-image:url(menuIcon/postuser_menu.png) !important;
+}
+.sysmenu_mag{
+	background-image:url(menuIcon/sysmenu_mag.png) !important;
+}
+.modulebutton_menu{
+	background-image:url(menuIcon/modulebutton_menu.png) !important;
+}
+.h_help{
+	background-image:url(menuIcon/h_help.png) !important;
+}
+organ_menu{
+	background-image:url(menuIcon/organ_menu.png) !important;
+}
+resources_mag{
+	background-image:url(moduleIcon/resources_mag.png) !important;
+}
+.all_add_menu{
+	background-image:url(icon/all_add.png) !important;
+}
+.sl_user{
+	background-image:url(menuIcon/sl_user.png) !important;
+}

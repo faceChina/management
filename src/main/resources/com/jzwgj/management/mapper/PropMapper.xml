@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jzwgj.management.mapper.PropMapper" >
+  <resultMap id="BaseResultMap" type="com.jzwgj.management.server.web.classifcation.domain.Prop" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="PID" property="pid" jdbcType="BIGINT" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="IS_COLOR_PROP" property="isColorProp" jdbcType="BIT" />
+    <result column="IS_ENUM_PROP" property="isEnumProp" jdbcType="BIT" />
+    <result column="IS_INPUT_PROP" property="isInputProp" jdbcType="BIT" />
+    <result column="IS_KEY_PROP" property="isKeyProp" jdbcType="BIT" />
+    <result column="IS_SALES_PROP" property="isSalesProp" jdbcType="BIT" />
+    <result column="IS_ALLOW_ALIAS" property="isAllowAlias" jdbcType="BIT" />
+    <result column="IS_STANDARD" property="isStandard" jdbcType="BIT" />
+    <result column="IS_REQUIRED" property="isRequired" jdbcType="BIT" />
+    <result column="IS_MULTI" property="isMulti" jdbcType="BIT" />
+    <result column="STATUS" property="status" jdbcType="INTEGER" />
+    <result column="SORT" property="sort" jdbcType="BIGINT" />
+    <result column="ALIAS" jdbcType="VARCHAR" property="alias" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, PID, NAME, IS_COLOR_PROP, IS_ENUM_PROP, IS_INPUT_PROP, IS_KEY_PROP, IS_SALES_PROP, 
+    IS_ALLOW_ALIAS, IS_STANDARD, IS_REQUIRED, IS_MULTI, STATUS, SORT, ALIAS, CREATE_TIME, 
+    UPDATE_TIME
+  </sql>
+	<sql id="queryObjWhereClause">
+		<where>
+			<if test="@org.apache.commons.lang.StringUtils@isNotBlank(pojo.id)">
+				and id = #{pojo.id,jdbcType=BIGINT}
+			</if>
+			<if test="@org.apache.commons.lang.StringUtils@isNotBlank(pojo.name)">
+				and name LIKE CONCAT('%',#{pojo.name, jdbcType=VARCHAR},'%') 
+			</if>
+			<if test="@org.apache.commons.lang.StringUtils@isNotBlank(classificationId)">
+				and id not in (
+		  			select cpr.PROP_ID 
+		  				from classification_prop_realtion cpr 
+		  					where cpr.CLASSIFICATION_ID = #{classificationId,jdbcType=BIGINT}
+		  		)
+			</if>
+			<if test="true">
+				and STATUS = 1
+			</if>
+		</where>
+	</sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from prop
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  
+  	<!-- 查询属性总数 -->
+  	<select id="selectCount" resultType="java.lang.Integer" parameterType="java.util.Map" >
+    	select count(ID)
+   		from prop
+			<include refid="queryObjWhereClause" />
+  	</select>
+  	
+  	<!-- 分页查询属性列表 -->
+  	<select id="selectPageList" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    	select 
+    		<include refid="Base_Column_List" />
+    	from prop
+			<include refid="queryObjWhereClause" />
+    	order by SORT desc, CREATE_TIME desc
+		limit ${start},${pageSize}
+  	</select>
+  	
+  <!-- 查询子集属性总数 -->
+  <select id="selectChildCount" resultType="java.lang.Integer" parameterType="java.lang.Long" >
+    select count(ID)
+    from prop
+    where PID = #{id,jdbcType=BIGINT} AND STATUS = 1
+  </select>
+  <!-- 查询子集下的属性 -->
+  <select id="selectTreeList" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from prop
+    where PID = #{node,jdbcType=BIGINT}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from prop
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.jzwgj.management.server.web.classifcation.domain.Prop" >
+   	<selectKey keyProperty="id" resultType="long" order="AFTER">
+		SELECT
+		LAST_INSERT_ID();
+	</selectKey>
+    insert into prop (ID, PID, NAME, 
+      IS_COLOR_PROP, IS_ENUM_PROP, IS_INPUT_PROP, 
+      IS_KEY_PROP, IS_SALES_PROP, IS_ALLOW_ALIAS, 
+      IS_STANDARD, IS_REQUIRED, IS_MULTI, 
+      STATUS, SORT, ALIAS, 
+      CREATE_TIME, UPDATE_TIME)
+    values (#{id,jdbcType=BIGINT}, #{pid,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
+      #{isColorProp,jdbcType=BIT}, #{isEnumProp,jdbcType=BIT}, #{isInputProp,jdbcType=BIT}, 
+      #{isKeyProp,jdbcType=BIT}, #{isSalesProp,jdbcType=BIT}, #{isAllowAlias,jdbcType=BIT}, 
+      #{isStandard,jdbcType=BIT}, #{isRequired,jdbcType=BIT}, #{isMulti,jdbcType=BIT}, 
+      #{status,jdbcType=INTEGER}, #{sort,jdbcType=BIGINT}, #{alias,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jzwgj.management.server.web.classifcation.domain.Prop" >
+   	<selectKey keyProperty="id" resultType="long" order="AFTER">
+		SELECT
+		LAST_INSERT_ID();
+	</selectKey>
+     insert into prop
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="pid != null">
+        PID,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="isColorProp != null">
+        IS_COLOR_PROP,
+      </if>
+      <if test="isEnumProp != null">
+        IS_ENUM_PROP,
+      </if>
+      <if test="isInputProp != null">
+        IS_INPUT_PROP,
+      </if>
+      <if test="isKeyProp != null">
+        IS_KEY_PROP,
+      </if>
+      <if test="isSalesProp != null">
+        IS_SALES_PROP,
+      </if>
+      <if test="isAllowAlias != null">
+        IS_ALLOW_ALIAS,
+      </if>
+      <if test="isStandard != null">
+        IS_STANDARD,
+      </if>
+      <if test="isRequired != null">
+        IS_REQUIRED,
+      </if>
+      <if test="isMulti != null">
+        IS_MULTI,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+      <if test="sort != null">
+        SORT,
+      </if>
+      <if test="alias != null">
+        ALIAS,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="pid != null">
+        #{pid,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="isColorProp != null">
+        #{isColorProp,jdbcType=BIT},
+      </if>
+      <if test="isEnumProp != null">
+        #{isEnumProp,jdbcType=BIT},
+      </if>
+      <if test="isInputProp != null">
+        #{isInputProp,jdbcType=BIT},
+      </if>
+      <if test="isKeyProp != null">
+        #{isKeyProp,jdbcType=BIT},
+      </if>
+      <if test="isSalesProp != null">
+        #{isSalesProp,jdbcType=BIT},
+      </if>
+      <if test="isAllowAlias != null">
+        #{isAllowAlias,jdbcType=BIT},
+      </if>
+      <if test="isStandard != null">
+        #{isStandard,jdbcType=BIT},
+      </if>
+      <if test="isRequired != null">
+        #{isRequired,jdbcType=BIT},
+      </if>
+      <if test="isMulti != null">
+        #{isMulti,jdbcType=BIT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=BIGINT},
+      </if>
+      <if test="alias != null">
+        #{alias,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jzwgj.management.server.web.classifcation.domain.Prop">
+    update prop
+    <set>
+      <if test="pid != null">
+        PID = #{pid,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="isColorProp != null">
+        IS_COLOR_PROP = #{isColorProp,jdbcType=BIT},
+      </if>
+      <if test="isEnumProp != null">
+        IS_ENUM_PROP = #{isEnumProp,jdbcType=BIT},
+      </if>
+      <if test="isInputProp != null">
+        IS_INPUT_PROP = #{isInputProp,jdbcType=BIT},
+      </if>
+      <if test="isKeyProp != null">
+        IS_KEY_PROP = #{isKeyProp,jdbcType=BIT},
+      </if>
+      <if test="isSalesProp != null">
+        IS_SALES_PROP = #{isSalesProp,jdbcType=BIT},
+      </if>
+      <if test="isAllowAlias != null">
+        IS_ALLOW_ALIAS = #{isAllowAlias,jdbcType=BIT},
+      </if>
+      <if test="isStandard != null">
+        IS_STANDARD = #{isStandard,jdbcType=BIT},
+      </if>
+      <if test="isRequired != null">
+        IS_REQUIRED = #{isRequired,jdbcType=BIT},
+      </if>
+      <if test="isMulti != null">
+        IS_MULTI = #{isMulti,jdbcType=BIT},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null">
+        SORT = #{sort,jdbcType=BIGINT},
+      </if>
+      <if test="alias != null">
+        ALIAS = #{alias,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jzwgj.management.server.web.classifcation.domain.Prop">
+    update prop
+    set PID = #{pid,jdbcType=BIGINT},
+      NAME = #{name,jdbcType=VARCHAR},
+      IS_COLOR_PROP = #{isColorProp,jdbcType=BIT},
+      IS_ENUM_PROP = #{isEnumProp,jdbcType=BIT},
+      IS_INPUT_PROP = #{isInputProp,jdbcType=BIT},
+      IS_KEY_PROP = #{isKeyProp,jdbcType=BIT},
+      IS_SALES_PROP = #{isSalesProp,jdbcType=BIT},
+      IS_ALLOW_ALIAS = #{isAllowAlias,jdbcType=BIT},
+      IS_STANDARD = #{isStandard,jdbcType=BIT},
+      IS_REQUIRED = #{isRequired,jdbcType=BIT},
+      IS_MULTI = #{isMulti,jdbcType=BIT},
+      STATUS = #{status,jdbcType=INTEGER},
+      SORT = #{sort,jdbcType=BIGINT},
+      ALIAS = #{alias,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="selectAll" resultType="com.jzwgj.management.server.web.classifcation.domain.Prop">
+      SELECT
+          <include refid="Base_Column_List" />
+      FROM
+          PROP
+      WHERE
+          STATUS = 1
+  </select>
+  
+  <select id="getMaxSort" resultType="java.lang.Long">
+      SELECT
+          MAX(SORT)
+      FROM
+          PROP
+      WHERE 
+          STATUS = 1
+  </select>
+</mapper>
